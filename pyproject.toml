@@ -1,0 +1,29 @@
+[project]
+name = "your-project-name"
+version = "0.1.0"
+description = "A brief description of your project"
+
+[tool.poetry]
+name = "your-project-name"
+version = "0.1.0"
+description = "A brief description of your project"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.group.dev.dependencies]
+commitizen = "^4.4.1"
+
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "pep440"
+version_provider = "poetry"
+update_changelog_on_bump = true
+major_version_zero = true
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+# Add your project dependencies here
