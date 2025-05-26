@@ -101,8 +101,8 @@ bump-version:
     - git config --global user.email "pietrzak.raphael@ynov.com"
     - git config --global user.name "GitLab CI"
   script:
-    - pip install bump2version
-    - bump2version patch --commit --tag
+    - pip install bumpversion
+    - bumpversion patch --new-version 1.0.1 --commit --tag
     - git push origin main --tags
   only:
     - main
