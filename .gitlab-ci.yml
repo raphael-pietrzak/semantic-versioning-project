@@ -103,7 +103,7 @@ bump-version:
   script:
     - poetry version patch
     - git add pyproject.toml
-    - git commit -m "chore(release): bump version to $(poetry version -s)"
+    - git commit -m 'chore(release): bump version to $(poetry version -s)'
     - git tag v$(poetry version -s)
     - git push origin main --tags
 
