@@ -4,7 +4,7 @@ FROM python:3.10-slim AS builder
 WORKDIR /src
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential=12.8ubuntu1 && \
+    apt-get install -y --no-install-recommends build-essential=12.9 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
