@@ -3,15 +3,14 @@ FROM python:3.10-slim AS builder
 
 WORKDIR /src
 
-RUN apt-get update && apt-get install -y --no-install-recommends     build-essential && \
+RUN apt-get update && apt-get install -y --no-install-recommends     build-essential \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
 RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 FROM python:3.10-slim
 
