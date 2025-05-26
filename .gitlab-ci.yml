@@ -101,9 +101,12 @@ bump-version:
     - git config --global user.email "pietrzak.raphael@ynov.com"
     - git config --global user.name "GitLab CI"
   script:
-    - pip install bumpversion
-    - bumpversion patch --new-version 1.0.1 --commit --tag
+    - poetry version patch
+    - git add pyproject.toml
+    - git commit -m "chore(release): bump version to $(poetry version -s)"
+    - git tag v$(poetry version -s)
     - git push origin main --tags
+
   only:
     - main
   needs:
