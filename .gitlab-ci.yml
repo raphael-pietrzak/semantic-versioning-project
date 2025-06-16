@@ -94,8 +94,10 @@ docker-build:
         docker push $DOCKER_IMAGE_NAME:latest
       fi
   needs:
-    - test
-    - validate-dockerfile
+    - job: test
+      optional: true
+    - job: validate-dockerfile
+      optional: true
 
 # Job pour bumper la version (uniquement sur main)
 bump-version:
