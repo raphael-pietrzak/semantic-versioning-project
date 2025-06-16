@@ -8,9 +8,12 @@ stages:
 variables:
   DOCKER_REGISTRY: ${CI_REGISTRY}
   DOCKER_IMAGE_NAME: ${CI_REGISTRY_IMAGE}
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_TAG: ${CI_COMMIT_REF_SLUG}
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.pip-cache"
   PYTHON_VERSION: "3.10"
+
 
 # Cette section définit les caches pour accélérer les pipelines
 cache:
@@ -69,14 +72,15 @@ validate-dockerfile:
     - branches
     - tags
 
-# Job pour construire et publier l'image Docker
+# Job pour construire et pousser l'image Docker
 docker-build:
   stage: package
   image: docker:20.10
   services:
     - docker:20.10-dind
   variables:
-    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
