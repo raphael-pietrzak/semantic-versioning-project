@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
@@ -16,12 +16,14 @@ class Main:
 @app.route("/")
 def index():
     main = Main()
-    return jsonify({"name": main.name, "version": main.version})
+    return render_template("index.html", name=main.name, version=main.version)
 
 
-@app.route("/add/<int:a>/<int:b>")
-def add(a, b):
+@app.route("/add", methods=["POST"])
+def add():
     main = Main()
+    a = int(request.form["num1"])
+    b = int(request.form["num2"])
     result = main.add_numbers(a, b)
     return jsonify({"result": result})
 
