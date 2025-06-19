@@ -121,10 +121,10 @@ bump-version:
     - git push origin main --tags
   needs:
     - docker-build
+
 # Job pour déployer l'application
 deploy-app:
   stage: deploy
-  image: alpine:latest
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
@@ -135,6 +135,8 @@ deploy-app:
     - mkdir -p ~/.ssh
     - ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+
+
   script:
     - sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker stop app-container || true"
     - sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker rm app-container || true"
