@@ -1,7 +1,7 @@
 # Étape de construction
 FROM python:3.10-slim AS builder
 
-WORKDIR /
+WORKDIR .
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential=12.9 && \
@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 FROM python:3.10-slim
 
-WORKDIR /
+WORKDIR .
 
 COPY --from=builder /venv /venv
 
@@ -27,4 +27,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "main.py"]
+CMD ["python", "src/main.py"]
