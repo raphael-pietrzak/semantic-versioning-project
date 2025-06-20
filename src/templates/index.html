@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ name }} - v{{ version }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ name }} - v{{ version }}</h1>
+        <div class="calculator">
+            <h2>Calculateur</h2>
+            <div class="input-group">
+                <input type="number" id="num1" placeholder="Premier nombre">
+                <input type="number" id="num2" placeholder="Second nombre">
+                <button onclick="calculate()">Calculer</button>
+            </div>
+            <div id="result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+
+            fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `num1=${num1}&num2=${num2}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = `Résultat: ${data.result}`;
+            });
+        }
+    </script>
+</body>
+</html>
