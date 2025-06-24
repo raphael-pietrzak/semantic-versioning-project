@@ -1,0 +1,45 @@
+---
+- name: Mon playbook complet avec Git et Docker
+  hosts: monserveur
+  become: yes
+
+  tasks:
+    - name: Mettre à jour le système
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: S'assurer que Docker est lancé
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Créer l'utilisateur raphael
+      user:
+        name: raphael
+        home: /home/raphael
+        shell: /bin/bash
+        state: present
+        create_home: yes
+
+    - name: Créer le dossier de l'application
+      file:
+        path: /opt/apps/raphael
+        state: directory
+        owner: raphael
+        group: raphael
+        mode: '0755'
+
+    - name: Cloner le dépôt GitLab
+      git:
+        repo: https://gitlab-srv-ynov.pwet.org/raphael.pietrzak/ci-cd-project.git
+        dest: /opt/apps/raphael/ci-cd-project
+        version: main  # ou master, selon la branche par défaut
+        update: yes
+      become_user: raphael
+
+    - name: Lancer le conteneur Docker depuis le projet
+      command: docker compose up -d
+      args:
+        chdir: /opt/apps/raphael/ci-cd-project

@@ -1,0 +1,2 @@
+[monserveur]
+51.15.247.116 ansible_user=raphael.pietrzak ansible_ssh_private_key_file=~/Downloads/formation
