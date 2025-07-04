@@ -134,6 +134,7 @@ bump-version:
   script:
     - pip install bump2version
     - bump2version patch --commit --tag
+    - git checkout -b main
     - git push origin main --tags
   needs:
     - docker-build
