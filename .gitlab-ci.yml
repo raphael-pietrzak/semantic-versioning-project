@@ -1,7 +1,7 @@
 stages:
-  # - validate
+  - validate
   - build
-  # - test
+  - test
   - package
   - deploy
 
@@ -22,19 +22,19 @@ cache:
     - .pip-cache/
     - venv/
 
-# # Job pour exécuter les hooks pre-commit
-# pre-commit:
-#   stage: validate
-#   image: python:${PYTHON_VERSION}-slim
-#   tags:
-#     - docker
-#   before_script:
-#     - pip install pre-commit
-#     - apt-get update && apt-get install -y git
-#   script:
-#     - pre-commit run --all-files
-#   only:
-#     - branches
+# Job pour exécuter les hooks pre-commit
+pre-commit:
+  stage: validate
+  image: python:${PYTHON_VERSION}-slim
+  tags:
+    - docker
+  before_script:
+    - pip install pre-commit
+    - apt-get update && apt-get install -y git
+  script:
+    - pre-commit run --all-files
+  only:
+    - branches
 
 # Job pour compiler votre projet
 build:
@@ -56,30 +56,30 @@ build:
   needs:
     - pre-commit
 
-# # Job pour exécuter les tests
-# test:
-#   stage: test
-#   image: python:${PYTHON_VERSION}-slim
-#   tags:
-#     - docker
-#   before_script:
-#     - source venv/bin/activate
-#   script:
-#     - pytest tests/
-#   needs:
-#     - build
+# Job pour exécuter les tests
+test:
+  stage: test
+  image: python:${PYTHON_VERSION}-slim
+  tags:
+    - docker
+  before_script:
+    - source venv/bin/activate
+  script:
+    - pytest tests/
+  needs:
+    - build
 
-# # Job pour valider le Dockerfile
-# validate-dockerfile:
-#   stage: validate
-#   image: hadolint/hadolint:latest-debian
-#   tags:
-#     - docker
-#   script:
-#     - hadolint Dockerfile
-#   only:
-#     - branches
-#     - tags
+# Job pour valider le Dockerfile
+validate-dockerfile:
+  stage: validate
+  image: hadolint/hadolint:latest-debian
+  tags:
+    - docker
+  script:
+    - hadolint Dockerfile
+  only:
+    - branches
+    - tags
 
 # Job pour construire et pousser l'image Docker
 docker-build:
