@@ -41,7 +41,7 @@ build:
   stage: build
   image: python:${PYTHON_VERSION}-slim
   tags:
-    - shell
+    - docker
   before_script:
     - python -m venv venv
     - source venv/bin/activate
@@ -61,7 +61,7 @@ test:
   stage: test
   image: python:${PYTHON_VERSION}-slim
   tags:
-    - shell
+    - docker
   before_script:
     - source venv/bin/activate
   script:
@@ -74,7 +74,7 @@ validate-dockerfile:
   stage: validate
   image: hadolint/hadolint:latest-debian
   tags:
-    - shell
+    - docker
   script:
     - hadolint Dockerfile
   only:
@@ -119,7 +119,7 @@ bump-version:
   stage: deploy
   image: python:${PYTHON_VERSION}-slim
   tags:
-    - shell
+    - docker
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
