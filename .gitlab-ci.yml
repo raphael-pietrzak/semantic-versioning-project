@@ -25,6 +25,8 @@ cache:
 pre-commit:
   stage: validate
   image: python:${PYTHON_VERSION}-slim
+  tags:
+    - shell
   before_script:
     - pip install pre-commit
     - apt-get update && apt-get install -y git
@@ -37,6 +39,8 @@ pre-commit:
 build:
   stage: build
   image: python:${PYTHON_VERSION}-slim
+  tags:
+    - shell
   before_script:
     - python -m venv venv
     - source venv/bin/activate
@@ -55,6 +59,8 @@ build:
 test:
   stage: test
   image: python:${PYTHON_VERSION}-slim
+  tags:
+    - shell
   before_script:
     - source venv/bin/activate
   script:
@@ -66,6 +72,8 @@ test:
 validate-dockerfile:
   stage: validate
   image: hadolint/hadolint:latest-debian
+  tags:
+    - shell
   script:
     - hadolint Dockerfile
   only:
@@ -76,6 +84,8 @@ validate-dockerfile:
 docker-build:
   stage: package
   image: docker:20.10
+  tags:
+    - docker
   services:
     - docker:20.10-dind
   variables:
@@ -107,6 +117,8 @@ docker-build:
 bump-version:
   stage: deploy
   image: python:${PYTHON_VERSION}-slim
+  tags:
+    - shell
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
@@ -125,6 +137,8 @@ bump-version:
 # Job pour déployer l'application
 deploy-app:
   stage: deploy
+  tags:
+    - shell
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       when: always
@@ -146,3 +160,15 @@ deploy-app:
     - echo "Application déployée sur http://$SSH_HOST:8241"
   needs:
     - docker-build
+
+# Job pour déployer avec AWX
+deploy-with-awx:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - |
+      curl -X POST "http://51.15.247.116:8080/api/v2/job_templates/1/launch/" \
+           -u "raphael.pietrzak:Formation-Ynov-2025" \
+           -H "Content-Type: application/json"
+  when: manual
