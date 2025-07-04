@@ -5,6 +5,7 @@ stages:
   - package
   - deploy
 
+
 variables:
   DOCKER_REGISTRY: ${CI_REGISTRY}
   DOCKER_IMAGE_NAME: ${CI_REGISTRY_IMAGE}
@@ -26,7 +27,7 @@ pre-commit:
   stage: validate
   image: python:${PYTHON_VERSION}-slim
   tags:
-    - shell
+    - docker
   before_script:
     - pip install pre-commit
     - apt-get update && apt-get install -y git
