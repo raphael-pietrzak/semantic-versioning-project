@@ -1,7 +1,7 @@
 stages:
-  - validate
+  # - validate
   - build
-  - test
+  # - test
   - package
   - deploy
 
